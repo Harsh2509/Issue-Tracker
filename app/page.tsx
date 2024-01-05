@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import {
   BarController,
   BarElement,
@@ -14,44 +15,61 @@ import { useEffect, useRef } from "react";
 Chart.register(BarController, CategoryScale, LinearScale, BarElement);
 
 export default function Home() {
+  return <Canvas />;
+}
+
+const Canvas = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    const chartCanvas = canvasRef.current;
+    (async () => {
+      const chartCanvas = canvasRef.current;
+      const labelBarChart = ["Open", "In Progress", "Closed"];
+      const issues = (await axios.get("/api/issues")).data;
 
-    const labelBarChart = ["Open", "In Progress", "Closed"];
+      const countEachIssueType = [0, 0, 0];
+      issues.forEach((element: (typeof issues)[0]) => {
+        if (element.status === "OPEN") {
+          countEachIssueType[0]++;
+        } else if (element.status === "IN_PROGRESS") {
+          countEachIssueType[1]++;
+        } else {
+          countEachIssueType[2]++;
+        }
+      });
 
-    const dataBarChart = {
-      labels: labelBarChart,
-      datasets: [
-        {
-          label: "# of Votes",
-          data: [12, 19, 3],
-          borderWidth: 1,
-          backgroundColor: "purple",
+      const dataBarChart = {
+        labels: labelBarChart,
+        datasets: [
+          {
+            label: "# of Issues",
+            data: countEachIssueType,
+            borderWidth: 1,
+            backgroundColor: "purple",
+          },
+        ],
+      };
+
+      const optionBarChart = {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
         },
-      ],
-    };
+      };
 
-    const optionBarChart = {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    };
+      const configBarChart: ChartConfiguration<
+        keyof ChartTypeRegistry,
+        number[],
+        string
+      > = {
+        type: "bar",
+        data: dataBarChart,
+        options: optionBarChart,
+      };
 
-    const configBarChart: ChartConfiguration<
-      keyof ChartTypeRegistry,
-      number[],
-      string
-    > = {
-      type: "bar",
-      data: dataBarChart,
-      options: optionBarChart,
-    };
-
-    chartCanvas && new Chart(chartCanvas, configBarChart);
+      chartCanvas && new Chart(chartCanvas, configBarChart);
+    })();
 
     return () => {
       if (canvasRef.current) {
@@ -66,4 +84,4 @@ export default function Home() {
       <canvas className="p-10" id="chartBar" ref={canvasRef}></canvas>
     </div>
   );
-}
+};
