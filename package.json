@@ -13,6 +13,7 @@
     "@prisma/client": "^5.7.1",
     "@radix-ui/themes": "^2.0.3",
     "axios": "^1.6.4",
+    "chart.js": "^4.4.1",
     "classnames": "^2.5.1",
     "next": "14.0.4",
     "react": "^18",
