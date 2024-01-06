@@ -1,5 +1,7 @@
 "use client";
 
+import { Card, Flex } from "@radix-ui/themes";
+import { Issue } from "@prisma/client";
 import axios from "axios";
 import {
   BarController,
@@ -10,42 +12,53 @@ import {
   ChartTypeRegistry,
   LinearScale,
 } from "chart.js";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import IssueTable from "./components/IssueTable";
 
 Chart.register(BarController, CategoryScale, LinearScale, BarElement);
 
 export default function Home() {
-  return <Canvas />;
+  return (
+    <Flex align="center" gap="2">
+      <Canvas />
+      <IssueTable />
+    </Flex>
+  );
 }
 
 const Canvas = () => {
   const canvasRef = useRef(null);
+  const labelBarChart = ["Open", "In Progress", "Closed"];
+  const [countEachIssueType, setCountEachIssueType] = useState([0, 0, 0]);
 
   useEffect(() => {
     (async () => {
       const chartCanvas = canvasRef.current;
       const labelBarChart = ["Open", "In Progress", "Closed"];
       const issues = (await axios.get("/api/issues")).data;
-
-      const countEachIssueType = [0, 0, 0];
+      let newCount = [0, 0, 0];
       issues.forEach((element: (typeof issues)[0]) => {
         if (element.status === "OPEN") {
-          countEachIssueType[0]++;
+          newCount[0]++;
         } else if (element.status === "IN_PROGRESS") {
-          countEachIssueType[1]++;
+          newCount[1]++;
         } else {
-          countEachIssueType[2]++;
+          newCount[2]++;
         }
       });
+
+      if (JSON.stringify(newCount) != JSON.stringify(countEachIssueType)) {
+        setCountEachIssueType(newCount);
+      }
 
       const dataBarChart = {
         labels: labelBarChart,
         datasets: [
           {
             label: "# of Issues",
-            data: countEachIssueType,
+            data: newCount,
             borderWidth: 1,
-            backgroundColor: "purple",
+            backgroundColor: "brown",
           },
         ],
       };
@@ -74,13 +87,27 @@ const Canvas = () => {
     return () => {
       if (canvasRef.current) {
         canvasRef.current = null;
+        setCountEachIssueType([0, 0, 0]);
       }
     };
-  }, []);
+  }, [countEachIssueType]);
 
   return (
-    <div className="overflow-hidden m-10 max-w-xl h-2/3">
-      <div className="py-3 px-5 bg-gray-50">Bar chart</div>
+    <div className="overflow-hidden m-10 max-w-xl basis-1/2 h-2/3">
+      <div className="flex items-center justify-around">
+        {labelBarChart.map((issueType, index) => {
+          return (
+            <div className="flex-grow border-x-2" key={issueType}>
+              <Card>
+                <Flex direction="column">
+                  <p>{issueType}</p>
+                  <h6>{countEachIssueType[index]}</h6>
+                </Flex>
+              </Card>
+            </div>
+          );
+        })}
+      </div>
       <canvas className="p-10" id="chartBar" ref={canvasRef}></canvas>
     </div>
   );
