@@ -31,7 +31,7 @@ export async function PUT(
   try {
     await prisma.issue.update({
       where: { id },
-      data: { description: body.description },
+      data: { description: body.description, status: body.option },
     });
   } catch (err) {
     return NextResponse.json(

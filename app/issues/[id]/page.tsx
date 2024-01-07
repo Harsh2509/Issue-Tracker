@@ -19,6 +19,7 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
   const [issue, setIssue] = useState<Issue | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [description, setDescription] = useState("");
+  const [option, setOption] = useState("Unassigned");
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +32,13 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
         const response = await axios.get(`/api/issues/${params.id}`);
         setIssue(response.data);
         setDescription(response.data.description);
+        const optn =
+          response.data.status == "OPEN"
+            ? "Unassigned"
+            : response.data.status == "IN_PROGRESS"
+            ? "In Progress"
+            : "Close";
+        setOption(optn);
       } catch (err) {
         console.error("Error fetching issue: ", err);
       } finally {
@@ -46,7 +54,13 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
   if (!issue) return <div>Issue Not found</div>;
 
   const editOnClick = async () => {
-    await axios.put(`/api/issues/${issue.id}`, { description });
+    const optn =
+      option == "Unassigned"
+        ? "OPEN"
+        : option == "In Progress"
+        ? "IN_PROGRESS"
+        : "CLOSED";
+    await axios.put(`/api/issues/${issue.id}`, { description, option: optn });
     router.push(`/issues`);
   };
 
@@ -78,7 +92,42 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
       </div>
 
       <div className="flex flex-col space-y-4">
-        <DropDown></DropDown>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Button variant="soft" size="2">
+              {option}
+              <IoIosArrowDown />
+            </Button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content size="2">
+            <DropdownMenu.Item
+              onClick={() => {
+                setOption("Unassigned");
+              }}
+            >
+              Unassigned
+            </DropdownMenu.Item>
+            <DropdownMenu.Item
+              onClick={() => {
+                setOption("In Progress");
+              }}
+            >
+              In Progress
+            </DropdownMenu.Item>
+            <DropdownMenu.Item
+              onClick={() => {
+                setOption("Close");
+              }}
+            >
+              Close
+            </DropdownMenu.Item>
+
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
+              Delete
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
         <Button onClick={editOnClick}>
           <FaEdit />
           Edit Issue
@@ -88,28 +137,5 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
     </div>
   );
 };
-
-function DropDown() {
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button variant="soft" size="2">
-          Unassigned
-          <IoIosArrowDown />
-        </Button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content size="2">
-        <DropdownMenu.Item>Unassigned</DropdownMenu.Item>
-        <DropdownMenu.Item>In Progress</DropdownMenu.Item>
-        <DropdownMenu.Item>Close</DropdownMenu.Item>
-
-        <DropdownMenu.Separator />
-        <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
-          Delete
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-  );
-}
 
 export default UpdateIssue;

@@ -3,7 +3,7 @@
 import { TextField, Button, Text, Callout } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
