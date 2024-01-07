@@ -10,13 +10,15 @@ const IssueTable = () => {
     async function fetchData() {
       const response = await axios.get("/api/issues");
       setIssues(response.data.reverse());
-      //   console.log(issues);
     }
     fetchData();
   }, []);
 
   return (
-    <div className="w-1/3 border-zinc-300 border-2 rounded-lg">
+    <div
+      className="border-zinc-300 border-2 rounded-lg"
+      style={{ width: "45%" }}
+    >
       <Table.Root>
         <Table.Header>
           <Table.Row>
@@ -31,7 +33,7 @@ const IssueTable = () => {
             return (
               <Table.Row key={issue.id}>
                 <Table.RowHeaderCell>
-                  <p>{issue.title}</p>
+                  <p className="pb-2 cursor-pointer">{issue.title}</p>
                   <Badge
                     color={
                       (issue.status == "OPEN" && "green") ||

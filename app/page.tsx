@@ -19,7 +19,7 @@ Chart.register(BarController, CategoryScale, LinearScale, BarElement);
 
 export default function Home() {
   return (
-    <Flex align="center" gap="2">
+    <Flex align="center" gap="2" justify="between">
       <Canvas />
       <IssueTable />
     </Flex>
@@ -93,11 +93,14 @@ const Canvas = () => {
   }, [countEachIssueType]);
 
   return (
-    <div className="overflow-hidden m-10 max-w-xl basis-1/2 h-2/3">
+    <div className="overflow-hidden m-10 max-w-xl basis-1/2 h-2/3 p-10 border-2 rounded-lg">
       <div className="flex items-center justify-around">
         {labelBarChart.map((issueType, index) => {
           return (
-            <div className="flex-grow border-x-2" key={issueType}>
+            <div
+              className="flex-grow border border-black mb-5 basis-1/3 rounded-lg"
+              key={issueType}
+            >
               <Card>
                 <Flex direction="column">
                   <p>{issueType}</p>
@@ -108,7 +111,7 @@ const Canvas = () => {
           );
         })}
       </div>
-      <canvas className="p-10" id="chartBar" ref={canvasRef}></canvas>
+      <canvas id="chartBar" ref={canvasRef}></canvas>
     </div>
   );
 };
