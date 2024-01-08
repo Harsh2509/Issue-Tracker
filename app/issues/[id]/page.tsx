@@ -60,8 +60,44 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
         : option == "In Progress"
         ? "IN_PROGRESS"
         : "CLOSED";
-    await axios.put(`/api/issues/${issue.id}`, { description, option: optn });
-    router.push(`/issues`);
+    try {
+      const updateResponse = await axios.put(`/api/issues/${issue.id}`, {
+        description,
+        option: optn,
+      });
+
+      if (updateResponse) {
+        router.push(`/issues`);
+      } else {
+        console.error(
+          "Something went wrong while calling /api/issues/[id] for updation"
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Encountering error with sending request to endpoint for updation"
+      );
+      return;
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const deleteResponse = await axios.delete(`/api/issues/${issue.id}`);
+
+      if (deleteResponse) {
+        router.push(`/issues`);
+      } else {
+        console.error(
+          "Something went wrong while calling /api/issues/[id] for deletion"
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Encountering error with sending request to endpoint for deletion"
+      );
+      return;
+    }
   };
 
   return (
@@ -123,7 +159,11 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
             </DropdownMenu.Item>
 
             <DropdownMenu.Separator />
-            <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
+            <DropdownMenu.Item
+              shortcut="⌘ ⌫"
+              color="red"
+              onClick={handleDelete}
+            >
               Delete
             </DropdownMenu.Item>
           </DropdownMenu.Content>
@@ -132,7 +172,9 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
           <FaEdit />
           Edit Issue
         </Button>
-        <Button color="red">Delete Issue</Button>
+        <Button color="red" onClick={handleDelete}>
+          Delete Issue
+        </Button>
       </div>
     </div>
   );
