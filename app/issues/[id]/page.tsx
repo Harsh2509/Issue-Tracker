@@ -3,6 +3,8 @@
 import { Issue } from "@prisma/client";
 import { IoIosArrowDown } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
+import SimpleMDE from "react-simplemde-editor";
+
 import {
   Badge,
   Button,
@@ -116,15 +118,13 @@ const UpdateIssue = ({ params }: { params: { id: string } }) => {
           </Badge>
           <Text>{`${issue.updatedAt}`}</Text>
         </div>
-
-        <TextArea
+        <SimpleMDE
+          placeholder="Description"
           value={description}
-          className="m=4"
-          onChange={(event) => {
-            setDescription(event.target.value);
+          onChange={(value) => {
+            setDescription(value);
           }}
-          size="3"
-        ></TextArea>
+        ></SimpleMDE>
       </div>
 
       <div className="flex flex-col space-y-4">

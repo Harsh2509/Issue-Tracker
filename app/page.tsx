@@ -19,7 +19,7 @@ Chart.register(BarController, CategoryScale, LinearScale, BarElement);
 
 export default function Home() {
   return (
-    <Flex align="center" gap="2" justify="between">
+    <Flex align="start" gap="2" justify="between">
       <Canvas />
       <IssueTable />
     </Flex>

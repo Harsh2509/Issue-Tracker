@@ -2,6 +2,7 @@ import { Issue } from "@prisma/client";
 import { Badge, Table } from "@radix-ui/themes";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import IssueTitle from "./IssueTitle";
 
 const IssueTable = () => {
   const [issues, setIssues] = useState([]);
@@ -33,7 +34,7 @@ const IssueTable = () => {
             return (
               <Table.Row key={issue.id}>
                 <Table.RowHeaderCell>
-                  <p className="pb-2 cursor-pointer">{issue.title}</p>
+                  <IssueTitle title={issue.title} id={issue.id} />
                   <Badge
                     color={
                       (issue.status == "OPEN" && "green") ||
