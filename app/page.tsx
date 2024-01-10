@@ -13,7 +13,7 @@ import {
   LinearScale,
 } from "chart.js";
 import { useEffect, useRef, useState } from "react";
-import IssueTable from "./components/IssueTable";
+import IssueTable from "./(components)/IssueTable";
 
 Chart.register(BarController, CategoryScale, LinearScale, BarElement);
 

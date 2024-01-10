@@ -5,14 +5,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
 import SimpleMDE from "react-simplemde-editor";
 
-import {
-  Badge,
-  Button,
-  DropdownMenu,
-  Heading,
-  Text,
-  TextArea,
-} from "@radix-ui/themes";
+import { Badge, Button, DropdownMenu, Heading, Text } from "@radix-ui/themes";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

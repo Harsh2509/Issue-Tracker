@@ -21,3 +21,7 @@ body {
 .hover-link:hover{
   color: rgb(1, 1, 255);
 }
+
+th, td {
+  word-wrap: break-word;
+}

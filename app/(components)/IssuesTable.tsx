@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
+import { DateTime } from "luxon";
 
 const IssuesTable = () => {
   const [issues, setIssues] = useState<Issue[] | null>(null);
@@ -27,7 +28,7 @@ const IssuesTable = () => {
   }, []);
 
   return (
-    <div style={{ minHeight: "200vh" }}>
+    <div>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <Button variant="soft" size="2">

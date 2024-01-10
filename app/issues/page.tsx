@@ -1,7 +1,7 @@
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
 import React from "react";
-import IssuesTable from "../components/IssuesTable";
+import IssuesTable from "../(components)/IssuesTable";
 
 const Issues = () => {
   return (

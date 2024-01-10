@@ -10,8 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import { z } from "zod";
 import { useState } from "react";
-import ErrorMessage from "@/app/components/ErrorMessage";
-import Spinner from "@/app/components/Spinner";
+import ErrorMessage from "@/app/(components)/ErrorMessage";
+import Spinner from "@/app/(components)/Spinner";
 
 type issueFormInput = z.infer<typeof createIssueSchema>;
 
